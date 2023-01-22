@@ -134,50 +134,57 @@ public class Paint {
                         else {
                             end.setPiece(start.getPiece());
                         }
-                        if (start.getPiece() instanceof King) {
-                            ((King) start.getPiece()).setMoved(true);
-                            if (end.getY() - start.getY() == 2) {
-                                castle(board, start.getX() == 7, true);
-
-                            }
-                            else if (end.getY() - start.getY() == -2) {
-                                castle(board, start.getX() == 7, false);
-                            }
-                        }
-                        if (start.getPiece() instanceof Rook) {
-                            ((Rook) start.getPiece()).setMoved(true);
-                        }
-                        start.setPiece(null);
-                        end.setPieceLocation(new Point((int) (getX(e) / PIX) * PIX, (int) (getY(e) / PIX) * PIX));
-                        end.setPreviousPoint(new Point((int) (getX(e) / PIX) * PIX, (int) (getY(e) / PIX) * PIX));
+                        checkForCastle(start, end);
+                        playMoveOnBoard(start, end, e);
                         board.setTurnWhite(!board.getTurnWhite());
                         frame.repaint();
-                        // TODO: /////////////////////////// TO PRINT MOVES TO CONSOLE ///////////////////////////
-                        if (board.getMovesAmt() == 6) {
-                            MoveList list = board.validMoves(false);
-                            int count = 0;
-                            for (Move m : list) {
-                                count++;
-                                System.out.println("Move " + count);
-                                System.out.println(m.toSpecialString());
-                            }
-                        }
-                        else {
-                            if (end.getPiece().isWhite()) {
-                                System.out.print((board.getMovesAmt() / 2) + 1 + ". " + board.getLastMove());
-                            } else {
-                                System.out.print(" " + board.getLastMove());
-                            }
-                            if (!board.kingNotInCheck(start, start, !end.getPiece().isWhite())) {
-                                System.out.print("+");
-                            }
-                            if (!end.getPiece().isWhite()) {
-                                System.out.println();
-                            }
-                        }
-                        // TODO: /////////////////////////////////////////////////////////////////////////////////
+                        printMoveToConsole(start, end);
                     }
                     selectedPiece = false;
+                }
+            }
+            private void checkForCastle(Spot start, Spot end) {
+                if (start.getPiece() instanceof King) {
+                    ((King) start.getPiece()).setMoved(true);
+                    if (end.getY() - start.getY() == 2) {
+                        castle(board, start.getX() == 7, true);
+
+                    }
+                    else if (end.getY() - start.getY() == -2) {
+                        castle(board, start.getX() == 7, false);
+                    }
+                }
+                if (start.getPiece() instanceof Rook) {
+                    ((Rook) start.getPiece()).setMoved(true);
+                }
+            }
+            private void playMoveOnBoard(Spot start, Spot end, MouseEvent e) {
+                start.setPiece(null);
+                end.setPieceLocation(new Point((int) (getX(e) / PIX) * PIX, (int) (getY(e) / PIX) * PIX));
+                end.setPreviousPoint(new Point((int) (getX(e) / PIX) * PIX, (int) (getY(e) / PIX) * PIX));
+            }
+            private void printMoveToConsole(Spot start, Spot end) {
+                if (board.getMovesAmt() == 6) {
+                    MoveList list = board.validMoves(false);
+                    int count = 0;
+                    for (Move m : list) {
+                        count++;
+                        System.out.println("Move " + count);
+                        System.out.println(m.toSpecialString());
+                    }
+                }
+                else {
+                    if (end.getPiece().isWhite()) {
+                        System.out.print((board.getMovesAmt() / 2) + 1 + ". " + board.getLastMove());
+                    } else {
+                        System.out.print(" " + board.getLastMove());
+                    }
+                    if (!board.kingNotInCheck(start, start, !end.getPiece().isWhite())) {
+                        System.out.print("+");
+                    }
+                    if (!end.getPiece().isWhite()) {
+                        System.out.println();
+                    }
                 }
             }
             @Override

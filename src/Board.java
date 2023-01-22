@@ -65,6 +65,12 @@ public class Board {
             blackPieces.add(new Spot(move.getEnd().getX(), move.getEnd().getY(), move.getStart().getPiece()));
         }
     }
+    public void makeTempMove() {
+
+    }
+    public void undoTempMove() {
+
+    }
     public int getMovesAmt() {
         return moveHistory.size();
     }
