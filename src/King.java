@@ -13,7 +13,8 @@ public class King extends Piece {
         int[] ranks = {0, 7};
         for (int rank : ranks) {
             if (!moved) {
-                if (end.equalsIgnorePiece(rank, 6) && start.equalsIgnorePiece(rank, 4)) {
+                if (end.equalsIgnorePiece(rank, 6) && start.equalsIgnorePiece(rank, 4) &&
+                        (rank == 0 && !start.getPiece().isWhite()) || (rank == 7 && start.getPiece().isWhite())) {
                     if (board.getSpot(rank, 7).getPiece() != null &&
                             board.getSpot(rank, 7).getPiece() instanceof Rook &&
                             !((Rook) board.getSpot(rank, 7).getPiece()).hasMoved()) {
