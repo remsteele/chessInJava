@@ -14,40 +14,44 @@ public class King extends Piece {
         for (int rank : ranks) {
             if (!moved) {
                 if (end.equalsIgnorePiece(rank, 6) && start.equalsIgnorePiece(rank, 4)) {
-                    if (board.getSpot(rank, 7).getPiece() != null &&
-                            board.getSpot(rank, 7).getPiece() instanceof Rook &&
-                            !((Rook) board.getSpot(rank, 7).getPiece()).hasMoved()) {
-                        if (board.getSpot(rank, 5).getPiece() == null &&
-                                board.getSpot(rank, 6).getPiece() == null) {
-                            if (board.kingNotInCheck(start, start, start.getPiece().isWhite()) &&
-                                    board.kingNotInCheck(start, new Spot(rank, 5, null), start.getPiece().isWhite()) &&
-                                    board.kingNotInCheck(start, end, start.getPiece().isWhite())) {
-                                if (start.getPiece().isWhite()) {
-                                    board.setWhiteKing(end);
-                                } else {
-                                    board.setBlackKing(end);
+                    if ((rank == 0 && !start.getPiece().isWhite()) || (rank == 7 && start.getPiece().isWhite())) {
+                        if (board.getSpot(rank, 7).getPiece() != null &&
+                                board.getSpot(rank, 7).getPiece() instanceof Rook &&
+                                !((Rook) board.getSpot(rank, 7).getPiece()).hasMoved()) {
+                            if (board.getSpot(rank, 5).getPiece() == null &&
+                                    board.getSpot(rank, 6).getPiece() == null) {
+                                if (board.kingNotInCheck(start, start, start.getPiece().isWhite()) &&
+                                        board.kingNotInCheck(start, new Spot(rank, 5, null), start.getPiece().isWhite()) &&
+                                        board.kingNotInCheck(start, end, start.getPiece().isWhite())) {
+                                    if (start.getPiece().isWhite()) {
+                                        board.setWhiteKing(end);
+                                    } else {
+                                        board.setBlackKing(end);
+                                    }
+                                    return true;
                                 }
-                                return true;
                             }
                         }
                     }
                 }
                 else if (end.equalsIgnorePiece(rank, 2) && start.equalsIgnorePiece(rank, 4)) {
-                    if (board.getSpot(rank, 0).getPiece() != null &&
-                            board.getSpot(rank, 0).getPiece() instanceof Rook &&
-                            !((Rook) board.getSpot(rank, 0).getPiece()).hasMoved()) {
-                        if (board.getSpot(rank, 1).getPiece() == null &&
-                                board.getSpot(rank, 2).getPiece() == null &&
-                                board.getSpot(rank, 3).getPiece() == null) {
-                            if (board.kingNotInCheck(start, start, start.getPiece().isWhite()) &&
-                                    board.kingNotInCheck(start, new Spot(rank, 3, null), start.getPiece().isWhite()) &&
-                                    board.kingNotInCheck(start, end, start.getPiece().isWhite())) {
-                                if (start.getPiece().isWhite()) {
-                                    board.setWhiteKing(end);
-                                } else {
-                                    board.setBlackKing(end);
+                    if ((rank == 0 && !start.getPiece().isWhite()) || (rank == 7 && start.getPiece().isWhite())) {
+                        if (board.getSpot(rank, 0).getPiece() != null &&
+                                board.getSpot(rank, 0).getPiece() instanceof Rook &&
+                                !((Rook) board.getSpot(rank, 0).getPiece()).hasMoved()) {
+                            if (board.getSpot(rank, 1).getPiece() == null &&
+                                    board.getSpot(rank, 2).getPiece() == null &&
+                                    board.getSpot(rank, 3).getPiece() == null) {
+                                if (board.kingNotInCheck(start, start, start.getPiece().isWhite()) &&
+                                        board.kingNotInCheck(start, new Spot(rank, 3, null), start.getPiece().isWhite()) &&
+                                        board.kingNotInCheck(start, end, start.getPiece().isWhite())) {
+                                    if (start.getPiece().isWhite()) {
+                                        board.setWhiteKing(end);
+                                    } else {
+                                        board.setBlackKing(end);
+                                    }
+                                    return true;
                                 }
-                                return true;
                             }
                         }
                     }
