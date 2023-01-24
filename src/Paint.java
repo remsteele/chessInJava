@@ -104,37 +104,6 @@ public class Paint {
                         Spot start = board.getSpot((int) (current.getX() / PIX), (int) (current.getY() / PIX));
                         Spot end = board.getSpot((int) (getX(e) / PIX), (int) (getY(e) / PIX));
                         board.setMove(start, end);
-//                        Piece promotesTo = null;
-//                        if (start.getPiece() instanceof Pawn
-//                                && (end.getX() == 7 || end.getX() == 0)) {
-//                            promotesTo = new Queen(start.getPiece().isWhite());
-//                        }
-//                        // if en passant
-//                        int enPassant = 0;
-//                        Spot pieceTaken;
-//                        if (start.getPiece() instanceof Pawn &&
-//                                end.getPiece() == null) {
-//                            enPassant = end.getY() - start.getY();
-//                        }
-//                        if (enPassant == 0) {
-//                            board.setLastMove(start.copy(), end.copy(), end.copy(), promotesTo);
-//                            board.makeMove(new Move(start.copy(), end.copy(), end.copy(), promotesTo));
-//                        }
-//                        else {
-//                            board.setLastMove(start.copy(), end.copy(), new Spot(start.getX(), start.getY() + enPassant, board.getSpot(start.getX(), start.getY() + enPassant).getPiece()), promotesTo);
-//                            board.makeMove(new Move(start.copy(), end.copy(), new Spot(start.getX(), start.getY() + enPassant, board.getSpot(start.getX(), start.getY() + enPassant).getPiece()), promotesTo));
-//                            board.remove(start.getX(), start.getY() + enPassant);
-//                        }
-                    // CODE TO MOVE PIECE:
-                        // if pawn on last rank:
-                        if (start.getPiece() instanceof Pawn
-                                && (end.getX() == 7 || (end.getX()) == 0)) {
-                            end.setPiece(new Queen(start.getPiece().isWhite()));
-                        }
-                        // if any other piece
-                        else {
-                            end.setPiece(start.getPiece());
-                        }
                         checkForCastle(start, end);
                         playMoveOnBoard(start, end, e);
                         board.setTurnWhite(!board.getTurnWhite());

@@ -72,6 +72,15 @@ public class Board {
             this.setMoveHistory(new Move(start.copy(), end.copy(), new Spot(start.getX(), start.getY() + enPassant, this.getSpot(start.getX(), start.getY() + enPassant).getPiece()), promotesTo));
             this.remove(start.getX(), start.getY() + enPassant);
         }
+        // if pawn on last rank -> promote
+        if (start.getPiece() instanceof Pawn
+                && (end.getX() == 7 || (end.getX()) == 0)) {
+            end.setPiece(new Queen(start.getPiece().isWhite()));
+        }
+        // else move normally
+        else {
+            end.setPiece(start.getPiece());
+        }
     }
 
     public void setMoveHistory(Move move) {
