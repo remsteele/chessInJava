@@ -43,13 +43,38 @@ public class Board {
         if (depth == 0) return sum;
         for (Move move : validMoves(white)) {
             setLastMove(move);
-            makeMove(move);
+            setMoveHistory(move);
             sum += countMoves(depth - 1, !white, sum);
             // undoMove method run here
         }
         return sum;
     }
-    public void makeMove(Move move) {
+
+    public void setMove(Spot start, Spot end) {
+        Piece promotesTo = null;
+        if (start.getPiece() instanceof Pawn
+                && (end.getX() == 7 || end.getX() == 0)) {
+            promotesTo = new Queen(start.getPiece().isWhite());
+        }
+        // if en passant
+        int enPassant = 0;
+        Spot pieceTaken;
+        if (start.getPiece() instanceof Pawn &&
+                end.getPiece() == null) {
+            enPassant = end.getY() - start.getY();
+        }
+        if (enPassant == 0) {
+            this.setLastMove(start.copy(), end.copy(), end.copy(), promotesTo);
+            this.setMoveHistory(new Move(start.copy(), end.copy(), end.copy(), promotesTo));
+        }
+        else {
+            this.setLastMove(start.copy(), end.copy(), new Spot(start.getX(), start.getY() + enPassant, this.getSpot(start.getX(), start.getY() + enPassant).getPiece()), promotesTo);
+            this.setMoveHistory(new Move(start.copy(), end.copy(), new Spot(start.getX(), start.getY() + enPassant, this.getSpot(start.getX(), start.getY() + enPassant).getPiece()), promotesTo));
+            this.remove(start.getX(), start.getY() + enPassant);
+        }
+    }
+
+    public void setMoveHistory(Move move) {
         if (move.getStart().getPiece().isWhite()) {
             whitePieces.remove(move.getStart());
             if (move.getTaken() != null) {
