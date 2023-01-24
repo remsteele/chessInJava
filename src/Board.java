@@ -1,29 +1,27 @@
 import java.util.ArrayList;
 
 public class Board {
-    private final Spot[][] squares = new Spot[8][8];
+    private Spot[][] squares = new Spot[8][8];
     private Spot whiteKing;
     private Spot blackKing;
-    private final MoveList moveHistory = new MoveList();
-    private final SpotList whitePieces = new SpotList();
-    private final SpotList blackPieces = new SpotList();
-    private final MoveList validWhiteMoves = new MoveList();
-    private final MoveList validBlackMoves = new MoveList();
+    private MoveList moveHistory = new MoveList();
+    private SpotList whitePieces = new SpotList();
+    private SpotList blackPieces = new SpotList();
     private boolean turnWhite = true;
 
     public Board() {
         // starting fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
         this.setFenPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
     }
-    public void printPieceLists() {
-        System.out.println("WHITE PIECES: ");
-        for (Spot s : whitePieces) {
-            System.out.println(s);
-        }
-        System.out.println("BLACK PIECES: ");
-        for (Spot s : blackPieces) {
-            System.out.println(s);
-        }
+    public Board(Spot[][] squares, Spot whiteKing, Spot blackKing, MoveList moveHistory,
+                 SpotList whitePieces, SpotList blackPieces, boolean turnWhite) {
+        this.squares = squares;
+        this.whiteKing = whiteKing;
+        this.blackKing = blackKing;
+        this.moveHistory = moveHistory;
+        this.whitePieces = whitePieces;
+        this.blackPieces = blackPieces;
+        this.turnWhite = turnWhite;
     }
     public void addPiece(Spot spot) {
         if (spot.getPiece() == null) {
@@ -36,19 +34,18 @@ public class Board {
             blackPieces.add(spot);
         }
     }
-    public int countMoves(int depth, boolean white, int sum) {
-
-        // write makeMove method in board class and playMove method in paint class
-
-        if (depth == 0) return sum;
-        for (Move move : validMoves(white)) {
-            setLastMove(move);
-            setMoveHistory(move);
-            sum += countMoves(depth - 1, !white, sum);
-            // undoMove method run here
-        }
-        return sum;
-    }
+//    public static int countMoves(Board board, int depth, boolean white, int sum) {
+//        Board newBoard = board;
+//        board.setMove(newBoard.validMoves(white).get(0).getStart().clone(), newBoard.validMoves(white).get(0).getEnd().clone());
+////        if (depth < 1) return newBoard.validMoves(white).size();
+////        for (Move move : newBoard.validMoves(white)) {
+////            newBoard.setMove(move.getStart(), move.getEnd());
+////            newBoard.setLastMove(move);
+////            newBoard.setMoveHistory(move);
+////            sum += countMoves(newBoard, depth, !white, sum);
+////        }
+//        return sum;
+//    }
 
     public void setMove(Spot start, Spot end) {
         Piece promotesTo = null;
@@ -64,12 +61,12 @@ public class Board {
             enPassant = end.getY() - start.getY();
         }
         if (enPassant == 0) {
-            this.setLastMove(start.copy(), end.copy(), end.copy(), promotesTo);
-            this.setMoveHistory(new Move(start.copy(), end.copy(), end.copy(), promotesTo));
+            this.setLastMove(start.clone(), end.clone(), end.clone(), promotesTo);
+            this.setMoveHistory(new Move(start.clone(), end.clone(), end.clone(), promotesTo));
         }
         else {
-            this.setLastMove(start.copy(), end.copy(), new Spot(start.getX(), start.getY() + enPassant, this.getSpot(start.getX(), start.getY() + enPassant).getPiece()), promotesTo);
-            this.setMoveHistory(new Move(start.copy(), end.copy(), new Spot(start.getX(), start.getY() + enPassant, this.getSpot(start.getX(), start.getY() + enPassant).getPiece()), promotesTo));
+            this.setLastMove(start.clone(), end.clone(), new Spot(start.getX(), start.getY() + enPassant, this.getSpot(start.getX(), start.getY() + enPassant).getPiece()), promotesTo);
+            this.setMoveHistory(new Move(start.clone(), end.clone(), new Spot(start.getX(), start.getY() + enPassant, this.getSpot(start.getX(), start.getY() + enPassant).getPiece()), promotesTo));
             this.remove(start.getX(), start.getY() + enPassant);
         }
         // if pawn on last rank -> promote
@@ -98,12 +95,6 @@ public class Board {
             }
             blackPieces.add(new Spot(move.getEnd().getX(), move.getEnd().getY(), move.getStart().getPiece()));
         }
-    }
-    public void makeTempMove() {
-
-    }
-    public void undoTempMove() {
-
     }
     public int getMovesAmt() {
         return moveHistory.size();
@@ -173,7 +164,7 @@ public class Board {
                     int y = spot.getY() + dir[1] * i;
                     if (x >= 0 && x <= 7 && y >= 0 && y <= 7) {
                         if (spot.getPiece().isValidMove(this, spot, this.getSpot(x, y))) {
-                            System.out.println("From " + spot + " to " + this.getSpot(x, y));
+//                            System.out.println("From " + spot + " to " + this.getSpot(x, y));
                             // fix for taken and promotion
                             validMoves.add(new Move(spot, this.getSpot(x, y), null, null));
                         }
@@ -416,9 +407,21 @@ class SpotList extends ArrayList<Spot> {
             }
         }
     }
+    @Override
+    public SpotList clone() {
+        SpotList temp = new SpotList();
+        temp.addAll(this);
+        return temp;
+    }
 }
 class MoveList extends ArrayList<Move> {
     public boolean contains() {
         return false;
+    }
+    @Override
+    public MoveList clone() {
+        MoveList temp = new MoveList();
+        temp.addAll(this);
+        return temp;
     }
 }

@@ -12,7 +12,7 @@ public class Paint {
     public static void main(String[] args) {
         Board board = new Board();
         Paint panel = new Paint(board);
-        System.out.println("Total moves: " + board.countMoves(1, true, 0));
+//        System.out.printf("Total moves: %,d\n", Board.countMoves(board, 1, true, 0));
     }
     // < TEMP
     static Point current;
@@ -134,27 +134,16 @@ public class Paint {
                 end.setPreviousPoint(new Point((int) (getX(e) / PIX) * PIX, (int) (getY(e) / PIX) * PIX));
             }
             private void printMoveToConsole(Spot start, Spot end) {
-                if (board.getMovesAmt() == 6) {
-                    MoveList list = board.validMoves(false);
-                    int count = 0;
-                    for (Move m : list) {
-                        count++;
-                        System.out.println("Move " + count);
-                        System.out.println(m.toSpecialString());
-                    }
+                if (end.getPiece().isWhite()) {
+                    System.out.print((board.getMovesAmt() / 2) + 1 + ". " + board.getLastMove());
+                } else {
+                    System.out.print(" " + board.getLastMove());
                 }
-                else {
-                    if (end.getPiece().isWhite()) {
-                        System.out.print((board.getMovesAmt() / 2) + 1 + ". " + board.getLastMove());
-                    } else {
-                        System.out.print(" " + board.getLastMove());
-                    }
-                    if (!board.kingNotInCheck(start, start, !end.getPiece().isWhite())) {
-                        System.out.print("+");
-                    }
-                    if (!end.getPiece().isWhite()) {
-                        System.out.println();
-                    }
+                if (!board.kingNotInCheck(start, start, !end.getPiece().isWhite())) {
+                    System.out.print("+");
+                }
+                if (!end.getPiece().isWhite()) {
+                    System.out.println();
                 }
             }
             @Override

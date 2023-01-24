@@ -13,7 +13,8 @@ public class Spot {
         this.pieceLocation = new Point(x * 60, y * 60);
         this.previousPoint = pieceLocation;
     }
-    public Spot copy() {
+    @Override
+    public Spot clone() {
         return new Spot(x, y, piece);
     }
     public boolean equalsIgnorePiece(int x, int y) {
