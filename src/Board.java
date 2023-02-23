@@ -11,7 +11,7 @@ public class Board {
 
     public Board() {
         // starting fen: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
-        this.setFenPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+        this.setFenPosition("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR");
     }
     public Board(Spot[][] squares, Spot whiteKing, Spot blackKing, MoveList moveHistory,
                  SpotList whitePieces, SpotList blackPieces, boolean turnWhite) {
@@ -34,18 +34,6 @@ public class Board {
             blackPieces.add(spot);
         }
     }
-//    public static int countMoves(Board board, int depth, boolean white, int sum) {
-//        Board newBoard = board;
-//        board.setMove(newBoard.validMoves(white).get(0).getStart().clone(), newBoard.validMoves(white).get(0).getEnd().clone());
-////        if (depth < 1) return newBoard.validMoves(white).size();
-////        for (Move move : newBoard.validMoves(white)) {
-////            newBoard.setMove(move.getStart(), move.getEnd());
-////            newBoard.setLastMove(move);
-////            newBoard.setMoveHistory(move);
-////            sum += countMoves(newBoard, depth, !white, sum);
-////        }
-//        return sum;
-//    }
 
     public void setMove(Spot start, Spot end) {
         Piece promotesTo = null;
@@ -316,7 +304,6 @@ public class Board {
     public void setFenPosition(String fen) {
         int x = 0;
         int y = 0;
-//        SpotList spots = new SpotList();
         char[] fenArr = fen.toCharArray();
         for (char c : fenArr) {
             if (c == '/') {
@@ -367,6 +354,52 @@ public class Board {
                     }
                 }
             }
+        }
+    }
+    public String getFenPosition() {
+        StringBuilder fen = new StringBuilder();
+        for (int x = 0; x < 8; x++) {
+            int count = 0;
+            for (int y = 0; y < 8; y++) {
+                if (squares[x][y].getPiece() == null) {
+                    count++;
+                }
+                else {
+                    if (count != 0) {
+                        fen.append(count);
+                        count = 0;
+                    }
+                    fen.append(pieceToSymbol(squares[x][y].getPiece()));
+                }
+            }
+            if (count != 0) {
+                fen.append(count);
+            }
+            if (x != 7) {
+                fen.append('/');
+            }
+        }
+        return fen.toString();
+    }
+    private static char pieceToSymbol(Piece p) {
+        boolean white = p.isWhite();
+        if (p instanceof King) {
+            return white ? 'K' : 'k';
+        }
+        else if (p instanceof Queen) {
+            return white ? 'Q' : 'q';
+        }
+        else if (p instanceof Rook) {
+            return white ? 'R' : 'r';
+        }
+        else if (p instanceof Bishop) {
+            return white ? 'B' : 'b';
+        }
+        else if (p instanceof Knight) {
+            return white ? 'N' : 'n';
+        }
+        else {
+            return white ? 'P' : 'p';
         }
     }
     private static Piece symbolToPiece(char c) {

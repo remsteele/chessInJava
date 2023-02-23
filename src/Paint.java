@@ -12,6 +12,7 @@ public class Paint {
     public static void main(String[] args) {
         Board board = new Board();
         Paint panel = new Paint(board);
+        System.out.println(board.getFenPosition());
 //        System.out.printf("Total moves: %,d\n", Board.countMoves(board, 1, true, 0));
     }
     // < TEMP
